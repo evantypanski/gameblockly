@@ -13,11 +13,13 @@
   <link rel="stylesheet" href="ardublockly.css" media="screen,projection">
 
   <!-- Ardublockly - These three files contain the compress version -->
+  <!--
   <script src="../blockly/blockly_compressed.js"></script>
   <script src="../blockly/blocks_compressed.js"></script>
   <script src="../blockly/arduino_compressed.js"></script>
+  -->
   <!-- To use the uncompressed version comment out the above and comment in the ones below -->
-  <!--script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/blockly_uncompressed.js"></script>
   <script src="../blockly/blocks/logic.js"></script>
   <script src="../blockly/blocks/loops.js"></script>
   <script src="../blockly/blocks/math.js"></script>
@@ -26,6 +28,9 @@
   <script src="../blockly/blocks/colour.js"></script>
   <script src="../blockly/blocks/variables.js"></script>
   <script src="../blockly/blocks/procedures.js"></script>
+  <script src="../blockly/blocks/gameduino/setup.js"></script>
+  <script src="../blockly/blocks/gameduino/move.js"></script>
+  <script src="../blockly/blocks/gameduino/controls.js"></script>
   <script src="../blockly/blocks/arduino/io.js"></script>
   <script src="../blockly/blocks/arduino/map.js"></script>
   <script src="../blockly/blocks/arduino/procedures.js"></script>
@@ -37,6 +42,9 @@
   <script src="../blockly/blocks/arduino/tone.js"></script>
   <script src="../blockly/blocks/arduino/variables.js"></script>
   <script src="../blockly/generators/arduino.js"></script>
+  <script src="../blockly/generators/gameduino/setup.js"></script>
+  <script src="../blockly/generators/gameduino/move.js"></script>
+  <script src="../blockly/generators/gameduino/controls.js"></script>
   <script src="../blockly/generators/arduino/boards.js"></script>
   <script src="../blockly/generators/arduino/io.js"></script>
   <script src="../blockly/generators/arduino/lists.js"></script>
@@ -52,7 +60,7 @@
   <script src="../blockly/generators/arduino/text.js"></script>
   <script src="../blockly/generators/arduino/time.js"></script>
   <script src="../blockly/generators/arduino/tone.js"></script>
-  <script src="../blockly/generators/arduino/variables.js"></script-->
+  <script src="../blockly/generators/arduino/variables.js"></script>
 
   <!-- Default language js files, user selection appended to head on load -->
   <script src="../blockly/msg/js/en.js"></script>
