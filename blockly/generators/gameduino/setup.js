@@ -34,44 +34,47 @@ goog.require('Blockly.Arduino');
  * @return {string} Completed code.
  */
 Blockly.Arduino['setup_all'] = function(block) {
-  var delay = 500 - 4 * block.getFieldValue('SPEED');
-  var numSprites = 1;
+  var characterSpeed = 11 - block.getFieldValue('SPEED');
+  var maxSprites = 100; // Change this to get more sprites
 
   // Include gameduino libraries
   Blockly.Arduino.addInclude('spi', '#include <SPI.h>'); // SPI must be before GD
   Blockly.Arduino.addInclude('gd', '#include <GD.h>');
 
 
+  // Initialize timing variable
+  var timingCode = 'static unsigned int t;';
+  Blockly.Arduino.addVariable('t', timingCode, false);
+
   // Initialize variables for sprites
 
-  /* Sprite order for row:
-   * Row 0: Frog
-   */
+  var sprite = block.getFieldValue('SPRITE');
+  var lAndRSprite, downSprite, upSprite; // Different characters have different sprites
+                                         // for left/right, down, and up
+  var leftRotation;                      // Right rotation = 0, left rotation defined here
+  if (sprite == 'm') {
+    Blockly.Arduino.addInclude('sprites', '#include <spritesMario.h>');
+    lAndRSprite = 48;
+    downSprite = 58;
+    upSprite = 59;
+    leftRotation = 2;
+  }
 
-  /* Sprites are listed in arrays with:
-   *   {x value, y value, rotation}
-   */ 
-  var spriteCode = 'int sprites[' + numSprites + '][3] = {\n' +
-                    '  {120, 232, 0}\n' +
-                    '};';
-  Blockly.Arduino.addVariable('sprites', spriteCode, false);
+  if (sprite == 'l') {
+    Blockly.Arduino.addInclude('sprites', '#include <spritesLink.h>');
+    lAndRSprite = 48;
+    downSprite = 53;
+    upSprite = 58;
+    leftRotation = 2;
+  }
 
-  /* Sprite animations are essentially a fourth entry into the sprite[][] variable,
-   * but a byte array.
-   */
-  var spriteAnimCode = 'byte spriteAnim[' + numSprites + '][5] = {\n' +
-                        '  {2, 1, 0, 0, 2}\n' +
-                        '};';
-  Blockly.Arduino.addVariable('spriteAnim', spriteAnimCode, false);
-                          
+  var spriteLocs = 'int spriteLocs[100][6];'
+  
+  Blockly.Arduino.addVariable('spriteLocs', spriteLocs, false);
 
   // Include constants
   Blockly.Arduino.addDeclaration('BG_BLACK', '#define BG_BLACK 34');
-  Blockly.Arduino.addDeclaration('NUM_SPRITES', '#define NUM_SPRITES ' + numSprites); // increment if adding sprite
-  Blockly.Arduino.addDeclaration('CONTROL_RIGHT', '#define CONTROL_RIGHT 5');
-  Blockly.Arduino.addDeclaration('CONTROL_LEFT', '#define CONTROL_LEFT 3');
-  Blockly.Arduino.addDeclaration('CONTROL_UP', '#define CONTROL_UP 0');
-  Blockly.Arduino.addDeclaration('CONTROL_DOWN', '#define CONTROL_DOWN 6');
+  Blockly.Arduino.addDeclaration('MAX_SPRITES', '#define MAX_SPRITES ' + maxSprites);
 
   var setupCode = 'GD.begin();\n  delay(500);\n';
   // Setup background
@@ -80,9 +83,9 @@ Blockly.Arduino['setup_all'] = function(block) {
   setupCode += '  GD.fill(RAM_PIC, BG_BLACK, 4096);\n';
 
   // Setup sprites
-  Blockly.Arduino.addInclude('sprites', '#include <sprite.h>');
-  setupCode += '  GD.copy(PALETTE16A, sprite_sprpal, sizeof(sprite_sprpal));\n';
-  setupCode += '  GD.uncompress(RAM_SPRIMG, sprite_sprimg);\n';
+
+  setupCode += '  GD.copy(RAM_SPRPAL, sprite_sprpal, sizeof(sprite_sprpal));\n';
+  setupCode += '  GD.copy(RAM_SPRIMG, sprite_sprimg, sizeof(sprite_sprimg));\n';
 
 
   // Setup pins for controller
@@ -92,74 +95,86 @@ Blockly.Arduino['setup_all'] = function(block) {
   Blockly.Arduino.reservePin(block, 7, 'Right', 'Right control');
   setupCode += '\n  for (byte i = 4; i < 8; i++) {\n' +
                '    pinMode(i, INPUT);' +
-               '    digitalWrite(i, HIGH);\n  }';
+               '    digitalWrite(i, HIGH);\n  }\n';
+
+  // Setup the spriteLocs variable - first initialize all to -1 to show unused
+  setupCode += '  for (int i = 0; i < MAX_SPRITES; i++) {\n' +
+               '    for (int j = 0; j < 6; j++) {\n' +
+               '      spriteLocs[i][j] = -1;\n' +
+               '    }\n  }\n';
+  // Now setup the initial character location
+  setupCode += '  spriteLocs[0][0] = 120;\n';
+  setupCode += '  spriteLocs[0][1] = 232;\n';
+  setupCode += '  spriteLocs[0][2] = ' + lAndRSprite + ';\n';
+  setupCode += '  spriteLocs[0][3] = 0;\n';
+  setupCode += '  spriteLocs[0][4] = ' + characterSpeed + ';\n';
   // Add setupCode to setup() function
-  Blockly.Arduino.addSetup('setupBG',  setupCode, false);
+  Blockly.Arduino.addSetup('setupCode',  setupCode, false);
 
-  var controls = [block.getFieldValue('CONTROLS_UP'), block.getFieldValue('CONTROLS_DOWN'), 
-            block.getFieldValue('CONTROLS_LEFT'), block.getFieldValue('CONTROLS_RIGHT')];
-  for (var i = 0; i < controls.length; i++) {
-    if (controls[i] == 'u') controls[i] = 'turn(0, \'u\');\n    moveCharacter(0, 5, \'u\');\n';
-    if (controls[i] == 'd') controls[i] = 'turn(0, \'d\');\n    moveCharacter(0, 5, \'d\');\n';
-    if (controls[i] == 'l') controls[i] = 'turn(0, \'l\');\n    moveCharacter(0, 5, \'l\');\n';
-    if (controls[i] == 'r') controls[i] = 'turn(0, \'r\');\n    moveCharacter(0, 5, \'r\');\n';
-  }
-  // Pin layout:
-  //   4 - up  5 - down  6 - left  7 - right
-  var controlsCode = 'void readControls() {\n' +
-                 '  if (digitalRead(4)) {\n' +
-                 '    ' + controls[0]  + '  }\n' + // TODO
-                 '  if (digitalRead(5)) {\n' +
-                 '    ' + controls[1]  + '  }\n' + // TODO
-                 '  if (digitalRead(6)) {\n' +
-                 '    ' + controls[2]  + '  }\n' + // TODO
-                 '  if (digitalRead(7)) {\n' +
-                 '    ' + controls[3]  + '  }\n}\n'; // TODO
-  Blockly.Arduino.addFunction('readControls', controlsCode);
-
-
-  // Add redrawAll() function
-  var redrawAllCode = 'void redrawAll() {\n' +
-                     '  for (int i = 0; i < NUM_SPRITES; i++) {\n' +
-                     '    draw_sprite(sprites[i][0], sprites[i][1],\n' +
-                     '                spriteAnim[i], sprites[i][2]);\n' +
-                     '  }\n' +
-                     '}';
+  var redrawAllCode = 'void redrawAll() {\n  for (int i=0; i < MAX_SPRITES; i++) {\n' + 
+                      '    if (spriteLocs[i][0] == -1) continue;\n' +
+                      '    else draw_sprite(spriteLocs[i][0], spriteLocs[i][1], \n' + 
+                      '                     spriteLocs[i][2], spriteLocs[i][3]);\n' +
+                      '  }\n}\n';
   Blockly.Arduino.addFunction('redrawAll', redrawAllCode);
-
-  var dirToRotCode = 'int dirToRot(char toTurn) {\n' +
-                 '  switch(toTurn) {\n' +
-                 '  case \'r\':\n      return CONTROL_RIGHT;\n' +
-                 '  case \'l\':\n      return CONTROL_LEFT;\n' +
-                 '  case \'u\':\n      return CONTROL_UP;\n' +
-                 '  case \'d\':\n      return CONTROL_DOWN;\n' +
-                 '  }\n}';
-  Blockly.Arduino.addFunction('dirToRot', dirToRotCode);
 
   // Add turn(int s, char toTurn) function
   // s is the sprite number that is to be turned
   // toTurn is a character ('r', 'l', 'u', 'd') that symbolizes a direction
-  // to turn the sprite
-  var turnCode = 'void turn(int s, char toTurn) {\n' +
-                 '  sprites[s][2] = dirToRot(toTurn);\n' +
-                 '}';
-  Blockly.Arduino.addFunction('turn', turnCode);
+   var turnCode = 'void turnCharacter(char toTurn) {\n' +
+                 '  switch(toTurn) {\n' +
+                 '  case \'r\':\n      spriteLocs[0][2]=' + lAndRSprite + 
+                                       ';\n      spriteLocs[0][3]=0;  break;\n' +
+                 '  case \'l\':\n      spriteLocs[0][2]=' + lAndRSprite + 
+                 ';\n      spriteLocs[0][3]=' + leftRotation + ';  break;\n' +
+                 '  case \'u\':\n      spriteLocs[0][2]=' + upSprite + 
+                 ';\n      spriteLocs[0][3]=0;  break;\n' +
+                 '  case \'d\':\n      spriteLocs[0][2]=' + downSprite + 
+                 ';\n      spriteLocs[0][3]=0;  break;\n' +
+                 '  }\n}';
+  Blockly.Arduino.addFunction('turnCharacter', turnCode);
 
+ // to turn the sprite
   // Add moveForward(int s, int units) function
   // s is the sprite number that is to be moved
   // dir is the direction character (same as toTurn above)
-  var moveCharacterCode = 'void moveCharacter(int s, int units, char toMove) {\n' +
-                '  int dir = dirToRot(toMove);\n  switch(dir) {\n' +
-                '    case CONTROL_RIGHT:\n      sprites[s][0] += units;  break;\n' +
-                '    case CONTROL_LEFT:\n      sprites[s][0] -= units;  break;\n' +
-                '    case CONTROL_UP:\n      sprites[s][1] -= units;  break;\n' +
-                '    case CONTROL_DOWN:\n      sprites[s][1] += units;  break;\n' +
+  var moveCharacterCode = 'void moveCharacter(int units, char toMove) {\n' +
+                '  switch(toMove) {\n' +
+                '    case \'r\':\n      spriteLocs[0][0] += units;  break;\n' +
+                '    case \'l\':\n      spriteLocs[0][0] -= units;  break;\n' +
+                '    case \'u\':\n      spriteLocs[0][1] -= units;  break;\n' +
+                '    case \'d\':\n      spriteLocs[0][1] += units;  break;\n' +
                 '  }\n}';
   Blockly.Arduino.addFunction('moveCharacter', moveCharacterCode);
 
+  var spawnMobCode = 'void spawnMob(int xVal, int yVal, int s, int speedVal, int moveCode) {\n' +
+                  '  for (int i=0; i < MAX_SPRITES; i++) {\n' +
+                  '    if (spriteLocs[i][0] == -1) {\n' +
+                  '      spriteLocs[i][0] = xVal;\n' +
+                  '      spriteLocs[i][1] = yVal;\n' +
+                  '      spriteLocs[i][2] = s;\n' +
+                  '      spriteLocs[i][3] = 0;\n' +
+                  '      spriteLocs[i][4] = speedVal;\n' +
+                  '      spriteLocs[i][5] = moveCode;\n' +
+                  '      break;\n    }\n  }\n}';
+  Blockly.Arduino.addFunction('spawnMob', spawnMobCode);
+
+  var moveMobsCode = 'void moveMobs() {\n' +
+                '  for (int i=0; i < MAX_SPRITES; i++) {\n' +
+                '    int speedVal = spriteLocs[i][4];\n' + 
+                '    if (speedVal != -1 && t % speedVal == 0) {\n' +
+                '      int moveCode = spriteLocs[i][5];\n' +
+                '      switch(moveCode) {\n' +
+                '        case 0: spriteLocs[i][1] -= 5;  break;\n' +
+                '        case 1: spriteLocs[i][1] += 5;  break;\n' +
+                '        case 2: spriteLocs[i][0] -= 5;  break;\n' +
+                '        case 3: spriteLocs[i][0] += 5;  break;\n' +
+                '      }\n    }\n  }\n}\n';
+  Blockly.Arduino.addFunction('movesMob', moveMobsCode);
+
   // Add code to loop() to constantly redraw all sprites
-  var code = 'GD.__wstartspr(0);\nredrawAll();\nGD.__end();\n' +
-             'readControls();\ndelay(' + delay + ');\n';
+  var code = 'moveMobs();\nt++;\nGD.__wstartspr(0);\nredrawAll();' + 
+             '\nGD.__end();\nGD.waitvblank();\n';
   return code;
 };
 

@@ -23,34 +23,11 @@ Blockly.Blocks['setup_all'] = {
         .appendField("setup game");
     this.appendDummyInput()
         .appendField("set speed to")
-        .appendField(new Blockly.FieldNumber('50', 0, 100, 1), 'SPEED')
-        .appendField("(0 to 100) 100 max speed");
+        .appendField(new Blockly.FieldNumber('5', 0, 10, 1), 'SPEED')
+        .appendField("(0 to 10) 10 max speed");
     this.appendDummyInput()
-        .appendField("Controls");
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("set right to")
-        .appendField(new Blockly.FieldDropdown(
-            [['move\xa0right', 'r'], ['move left', 'l'], ['move up', 'u'], ['move down', 'd']]), 
-            'CONTROLS_RIGHT');
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("set left to")
-        .appendField(new Blockly.FieldDropdown(
-            [['move\xa0left', 'l'], ['move right', 'r'], ['move up', 'u'], ['move down', 'd']]), 
-            'CONTROLS_LEFT');
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("set up to")
-        .appendField(new Blockly.FieldDropdown(
-            [['move\xa0up', 'u'], ['move right', 'r'], ['move left', 'l'], ['move down', 'd']]),
-            'CONTROLS_UP');
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("set down to")
-        .appendField(new Blockly.FieldDropdown(
-            [['move\xa0down', 'd'], ["move right", 'r'], ['move left', 'l'], ['move up', 'u']]), 
-            'CONTROLS_DOWN');
+        .appendField("select character")
+        .appendField(new Blockly.FieldDropdown([['Mario', 'm'], ['Link', 'l']]), 'SPRITE');
     this.setInputsInline(false);
     this.setPreviousStatement(false, null);
     this.setNextStatement(true, null);

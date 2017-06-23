@@ -22,15 +22,9 @@ Ardublockly.TOOLBOX_XML =
 '    <block type="controls_left"></block>' +
 '    <block type="controls_right"></block>' +
 '  </category>' +
-'  <category id="catMove" name="Movement">' +
-'    <block type="move_units">' +
-'      <value name="UNITS">' +
-'        <block type="math_number">' +
-'          <field name="NUM">10</field>' +
-'        </block>' +
-'      </value>' +
-'    </block>' +
-'    <block type="move_turn"></block>' +
+'  <sep></sep>' +
+'  <category id="catMobs" name="Mobs">' +
+'    <block type="mobs_hostile"></block>' +
 '  </category>' +
 '  <sep></sep>' +
 '  <category id="catLogic" name="Logic">' +
