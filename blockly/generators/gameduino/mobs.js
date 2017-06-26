@@ -47,7 +47,7 @@ Blockly.Arduino['mobs_hostile'] = function(block) {
   if (moves === 'ar') moveCode = 3;
   
   code += '  spawnMob(' + xVal + ', ' + yVal + ', ' + s + ', ' + 
-          speed + ', ' + moveCode + ');\n}';
+          speed + ', ' + moveCode + ');\n';
 
   return code;
 }

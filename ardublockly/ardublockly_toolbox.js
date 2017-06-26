@@ -17,14 +17,32 @@ Ardublockly.TOOLBOX_XML =
 '  </category>' +
 '  <sep></sep>' +
 '  <category id="catControls" name="Controls">' +
-'    <block type="controls_up"></block>' +
-'    <block type="controls_down"></block>' +
-'    <block type="controls_left"></block>' +
-'    <block type="controls_right"></block>' +
+'    <block type="if_controls">' +
+'      <value name="IF">' +
+'        <block type="controls_options"></block>' +
+'      </value>' +
+'    </block>' +
+'    <block type="move_units">' + 
+'      <value name="UNITS">' +
+'        <block type="math_number">' +
+'          <field name="NUM">5</field>' +
+'        </block>' +
+'      </value>' +
+'    </block>' +
+'    <block type="move_turn"></block>' +
 '  </category>' +
 '  <sep></sep>' +
 '  <category id="catMobs" name="Mobs">' +
 '    <block type="mobs_hostile"></block>' +
+'  </category>' + 
+'  <sep></sep>' +
+'  <category id="catCollision" name="Collisions">' +
+'    <block type="collision_enable"></block>' +
+'    <block type="collision_if">' +
+'      <value name="IF">' +
+'        <block type="collision_ifoptions"></block>' +
+'      </value>' +
+'    </block>' +
 '  </category>' +
 '  <sep></sep>' +
 '  <category id="catLogic" name="Logic">' +

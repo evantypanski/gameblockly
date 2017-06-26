@@ -13,13 +13,13 @@ goog.require('Blockly.Arduino');
 Blockly.Arduino['move_units'] = function(block) {
   var units = Blockly.Arduino.valueToCode(block, 'UNITS',
     Blockly.Arduino.ORDER_ATOMIC);
-  var toMove = 'r';
-  var code = 'moveForward(0, ' + units + ', \'' + toMove + '\');\n';
+  var toMove = block.getFieldValue('TO_MOVE');
+  var code = 'moveCharacter(' + units + ', \'' + toMove + '\');\n';
   return code;
 };
 
 Blockly.Arduino['move_turn'] = function(block) {
   var toTurn = block.getFieldValue('TO_TURN');
-  var code = 'turn(0, \'' + toTurn + '\');\n';
+  var code = 'turn(\'' + toTurn + '\');\n';
   return code;
 };

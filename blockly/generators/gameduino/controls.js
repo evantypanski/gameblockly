@@ -13,38 +13,21 @@ function makeCodeFromControl(control) {
   return control;
 };
 
-Blockly.Arduino['controls_up'] = function(block) {
-  var control = block.getFieldValue('CONTROLS_UP');
-  control = makeCodeFromControl(control);
-  var code = 'if (t % charSpeed == 0) {\n' + 
-             '  if (digitalRead(4)) {\n' +
-             '    ' + control + '  }\n}\n';
-  return code;
-};
+Blockly.Arduino['if_controls'] = function(block) {
+  var argument = Blockly.Arduino.valueToCode(block, 'IF', Blockly.Arduino.ORDER_NONE) || 'false';
+  var branch = Blockly.Arduino.statementToCode(block, 'DO');
+  var code = 'if (t % sprites[0].speedVal == 0) {\n  if (' + argument + ') {\n' + 
+             branch + '  }\n}';
+  return code + '\n';
+}
 
-Blockly.Arduino['controls_down'] = function(block) {
-  var control = block.getFieldValue('CONTROLS_DOWN');
-  control = makeCodeFromControl(control);
-  var code = 'if (t % charSpeed == 0) {\n' + 
-             '  if (digitalRead(5)) {\n' +
-             '    ' + control + '  }\n}\n';
-  return code;
-};
-
-Blockly.Arduino['controls_left'] = function(block) {
-  var control = block.getFieldValue('CONTROLS_LEFT');
-  control = makeCodeFromControl(control);
-  var code = 'if (t % charSpeed == 0) {\n' + 
-             '  if (digitalRead(6)) {\n' +
-             '    ' + control + '  }\n}\n';
-  return code;
-};
-
-Blockly.Arduino['controls_right'] = function(block) {
-  var control = block.getFieldValue('CONTROLS_RIGHT');
-  control = makeCodeFromControl(control);
-  var code = 'if (t % charSpeed == 0) {\n' + 
-             '  if (digitalRead(7)) {\n' +
-             '    ' + control + '  }\n}\n';
-  return code;
-};
+Blockly.Arduino['controls_options'] = function(block) {
+  var control = block.getFieldValue('CONTROL');
+  var code = "digitalRead(";
+  if (control == 'u') code += 4;
+  if (control == 'd') code += 5;
+  if (control == 'l') code += 6;
+  if (control == 'r') code += 7;
+  code += ")";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+}

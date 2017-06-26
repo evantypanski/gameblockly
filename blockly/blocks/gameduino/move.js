@@ -18,9 +18,11 @@ Blockly.Blocks['move_units'] = {
     this.setColour(Blockly.Blocks.move.HUE);
     this.appendValueInput('UNITS')
         .setCheck(Blockly.Types.NUMBER.checkList)
-        .appendField("move forward");
+        .appendField("move");
     this.appendDummyInput()
-        .appendField(" units");
+        .appendField("units in the direction")
+        .appendField(new Blockly.FieldDropdown(
+            [['right', 'r'], ['left', 'l'], ['up', 'u'], ['down', 'd']]), 'TO_MOVE');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
