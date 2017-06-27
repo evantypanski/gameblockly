@@ -20,6 +20,6 @@ Blockly.Arduino['move_units'] = function(block) {
 
 Blockly.Arduino['move_turn'] = function(block) {
   var toTurn = block.getFieldValue('TO_TURN');
-  var code = 'turn(\'' + toTurn + '\');\n';
+  var code = 'turnCharacter(\'' + toTurn + '\');\n';
   return code;
 };

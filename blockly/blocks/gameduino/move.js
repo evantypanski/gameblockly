@@ -22,7 +22,7 @@ Blockly.Blocks['move_units'] = {
     this.appendDummyInput()
         .appendField("units in the direction")
         .appendField(new Blockly.FieldDropdown(
-            [['right', 'r'], ['left', 'l'], ['up', 'u'], ['down', 'd']]), 'TO_MOVE');
+            [['up', 'u'], ['right', 'r'], ['left', 'l'], ['down', 'd']]), 'TO_MOVE');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

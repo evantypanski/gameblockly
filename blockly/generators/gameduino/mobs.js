@@ -6,21 +6,7 @@ goog.require('Blockly.Arduino');
 
 var oneSecond = 72;
 
-Blockly.Arduino['mobs_hostile'] = function(block) {
-  var code = ''; 
-  var s = block.getFieldValue('MOB_SPRITE');
-  var spawnLoc = block.getFieldValue('MOB_SPAWN_LOC');
-  var spawnTime = block.getFieldValue('MOB_SPAWN_TIME');
-  var speed = 11 - block.getFieldValue('MOB_SPEED');
-  var moves = block.getFieldValue('MOB_MOVES');
-
-  if (spawnTime === '1') code += 'if (t != 0 && t % ' + oneSecond + ' == 0) {\n';
-  if (spawnTime === '3') code += 'if (t != 0 && t % ' + oneSecond * 3 + ' == 0) {\n';
-  if (spawnTime === '5') code += 'if (t != 0 && t % ' + oneSecond * 5 + ' == 0) {\n';
-  if (spawnTime === '10') code += 'if (t != 0 && t % ' + oneSecond * 10 + ' == 0) {\n';
-  if (spawnTime === '20') code += 'if (t != 0 && t % ' + oneSecond * 20 + ' == 0) {\n';
-  if (spawnTime === '50') code += 'if (t != 0 && t % ' + oneSecond * 50 + ' == 0) {\n';
-
+var findSpawnLoc = function(spawnLoc) {
   var xVal;
   var yVal;
   if (spawnLoc == 'r') { 
@@ -39,15 +25,67 @@ Blockly.Arduino['mobs_hostile'] = function(block) {
     xVal = 350;
     yVal = 40;
   }
+  if (spawnLoc === 'ml') {
+    xVal = 50;
+    yVal = 150;
+  }
+  if (spawnLoc === 'mm') {
+    xVal = 200;
+    yVal = 150;
+  }
+  if (spawnLoc === 'mr') {
+    xVal = 350;
+    yVal = 150;
+  }
+  if (spawnLoc === 'bl') {
+    xVal = 50;
+    yVal = 260;
+  }
+  if (spawnLoc === 'bm') {
+    xVal = 200;
+    yVal = 260;
+  }
+  if (spawnLoc === 'br') {
+    xVal = 350;
+    yVal = 260;
+  }
 
-  var moveCode;
-  if (moves === 'au') moveCode = 0;
-  if (moves === 'ad') moveCode = 1;
-  if (moves === 'al') moveCode = 2;
-  if (moves === 'ar') moveCode = 3;
-  
-  code += '  spawnMob(' + xVal + ', ' + yVal + ', ' + s + ', ' + 
-          speed + ', ' + moveCode + ');\n';
+  return [xVal, yVal];
+};
+
+Blockly.Arduino['mobs_hostile'] = function(block) {
+  var code = ''; 
+  var s = block.getFieldValue('MOB_SPRITE');
+  var spawnLoc = block.getFieldValue('MOB_SPAWN_LOC');
+  var speed = 11 - block.getFieldValue('MOB_SPEED');
+  var moves = block.getFieldValue('MOB_MOVES');
+
+  var spawn = findSpawnLoc(spawnLoc);
+
+  code += 'spawnMob(' + spawn[0] + ', ' + spawn[1] + ', ' + s + ', ' + 
+          speed + ', ' + moves + ');\n';
 
   return code;
-}
+};
+
+Blockly.Arduino['mobs_items'] = function(block) {
+  var s = block.getFieldValue('ITEM_SPRITE');
+  var spawnLoc = block.getFieldValue('ITEM_SPAWN_LOC');
+  var doesMove  = block.getFieldValue('ITEM_MOVE_YN');
+  var speed = 11 - block.getFieldValue('ITEM_SPEED');
+  var moves = block.getFieldValue('ITEM_MOVES');
+
+  var spawn = findSpawnLoc(spawnLoc);
+
+  var code = 'spawnItem(' + spawn[0] + ', ' + spawn[1] + ', ' + s;
+
+  if (doesMove == 'y') code += ', ' + speed + ', ' + moves;
+
+  code += ');\n';
+
+  return code;
+};
+
+Blockly.Arduino['mobs_destroy'] = function(block) {
+  return 'removeSprite(whoColliding);\n';
+};

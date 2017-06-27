@@ -28,9 +28,18 @@ Blockly.Blocks['setup_all'] = {
     this.appendDummyInput()
         .appendField("select character")
         .appendField(new Blockly.FieldDropdown([['Mario', 'm'], ['Link', 'l']]), 'SPRITE');
-    this.setInputsInline(false);
-    this.setPreviousStatement(false, null);
-    this.setNextStatement(true, null);
-
+    this.appendDummyInput()
+        .appendField("if a sprite hits the edge")
+        .appendField(new Blockly.FieldDropdown([['loop\xa0around', 'l'], ['hit wall', 'w']]), 
+                     'EDGE');
+    this.appendDummyInput()
+        .appendField("number of lives")
+        .appendField(new Blockly.FieldNumber('3', 0, 10000, 1), 'LIVES');
+    this.appendStatementInput('DO')
+        .appendField("insert code to be run once at the beginning:");
+    this.appendDummyInput()
+        .appendField("insert code to be run 72 times a second below");
+    this.setPreviousStatement(false);
+    this.setNextStatement(true);
   }
 };
