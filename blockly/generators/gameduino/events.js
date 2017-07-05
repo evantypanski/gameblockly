@@ -1,6 +1,6 @@
 'use strict';
 
-goog.provide('Blockly.Gameduino.Collision');
+goog.provide('Blockly.Gameduino.Events');
 
 goog.require('Blockly.Arduino');
 
@@ -8,8 +8,8 @@ var findSpawnLoc = function(spawnLoc) {
   var xVal;
   var yVal;
   if (spawnLoc == 'r') { 
-    xVal = 'random(400)';
-    yVal = 'random(300)';
+    xVal = 'random(MAX_X)';
+    yVal = 'random(MAX_Y - 20)';
   }
   if (spawnLoc === 'tl') {
     xVal = 50;
@@ -51,32 +51,17 @@ var findSpawnLoc = function(spawnLoc) {
   return [xVal, yVal];
 };
 
-var oneSecond = 72;
-
 Blockly.Arduino['collision_enable'] = function(block) {
   var toEnable = block.getFieldValue('COLLISIONS');
-  var enableCode;
-  if (toEnable === 'e') enableCode = 'GD.wr(JK_MODE, 1);\n';
-  else enableCode = 'GD.wr(JK_MODE, 0);\n';
+  var code = 'sprites[0].jk = ' + toEnable + ';\n';
 
-  return enableCode;
+  return code;
 };
 
-Blockly.Arduino['events_if'] = function(block) {
-  var argument = Blockly.Arduino.valueToCode(block, 'IF', Blockly.Arduino.ORDER_NONE) || 'false';
+Blockly.Arduino['events_nolives'] = function(block) {
   var branch = Blockly.Arduino.statementToCode(block, 'DO');
-  var code = 'if (' + argument + ') {\n' + branch + '}';
+  var code = 'if (lives <= 0) {\n' + branch + '}';
   return code + '\n';
-};
-
-Blockly.Arduino['events_options'] = function(block) {
-  var e = block.getFieldValue('EVENT');
-  var code = "";
-  if (e == 'h') code = "whoColliding >= 10";
-  if (e == 'i') code = "whoColliding < 10 && whoColliding != -1";
-  if (e == 'd') code = "dead";
-  if (e == 'l') code = "lives <= 0";
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['events_score'] = function(block) {
@@ -85,8 +70,12 @@ Blockly.Arduino['events_score'] = function(block) {
   return 'score ' + op + '= ' + amt + ';\n';
 };
 
-Blockly.Arduino['events_reset'] = function(block) {
-  return 'setup();\n';
+Blockly.Arduino['events_lose'] = function(block) {
+  return 'gameOver(' + block.getFieldValue('SECONDS') + ');\n';
+};
+
+Blockly.Arduino['events_win'] = function(block) {
+  return 'gameWon(' + block.getFieldValue('SECONDS') + ');\n';
 };
 
 Blockly.Arduino['events_respawn'] = function(block) {

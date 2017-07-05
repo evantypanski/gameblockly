@@ -37,7 +37,7 @@ Blockly.Blocks['move_turn'] = {
     this.appendDummyInput()
         .appendField("turn to face ")
         .appendField(new Blockly.FieldDropdown(
-            [['right', 'r'], ['left', 'l'], ['up', 'u'], ['down', 'd']]), 'TO_TURN');
+            [['up', 'u'], ['right', 'r'], ['left', 'l'], ['down', 'd']]), 'TO_TURN');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

@@ -10,8 +10,8 @@ var findSpawnLoc = function(spawnLoc) {
   var xVal;
   var yVal;
   if (spawnLoc == 'r') { 
-    xVal = 'random(400)';
-    yVal = 'random(300)';
+    xVal = 'random(MAX_X)';
+    yVal = 'random(MAX_Y - 20)';
   }
   if (spawnLoc === 'tl') {
     xVal = 50;
@@ -53,31 +53,16 @@ var findSpawnLoc = function(spawnLoc) {
   return [xVal, yVal];
 };
 
-Blockly.Arduino['mobs_hostile'] = function(block) {
-  var code = ''; 
-  var s = block.getFieldValue('MOB_SPRITE');
-  var spawnLoc = block.getFieldValue('MOB_SPAWN_LOC');
-  var speed = 11 - block.getFieldValue('MOB_SPEED');
-  var moves = block.getFieldValue('MOB_MOVES');
+Blockly.Arduino['mobs_spawn'] = function(block) {
+  var s = block.getFieldValue('SPRITE');
+  var spawnLoc = block.getFieldValue('SPAWN_LOC');
+  var doesMove  = block.getFieldValue('MOVE_YN');
+  var speed = block.getFieldValue('SPEED');
+  var moves = block.getFieldValue('MOVES');
 
   var spawn = findSpawnLoc(spawnLoc);
 
-  code += 'spawnMob(' + spawn[0] + ', ' + spawn[1] + ', ' + s + ', ' + 
-          speed + ', ' + moves + ');\n';
-
-  return code;
-};
-
-Blockly.Arduino['mobs_items'] = function(block) {
-  var s = block.getFieldValue('ITEM_SPRITE');
-  var spawnLoc = block.getFieldValue('ITEM_SPAWN_LOC');
-  var doesMove  = block.getFieldValue('ITEM_MOVE_YN');
-  var speed = 11 - block.getFieldValue('ITEM_SPEED');
-  var moves = block.getFieldValue('ITEM_MOVES');
-
-  var spawn = findSpawnLoc(spawnLoc);
-
-  var code = 'spawnItem(' + spawn[0] + ', ' + spawn[1] + ', ' + s;
+  var code = 'spawnSprite(' + spawn[0] + ', ' + spawn[1] + ', ' + s;
 
   if (doesMove == 'y') code += ', ' + speed + ', ' + moves;
 
@@ -85,6 +70,14 @@ Blockly.Arduino['mobs_items'] = function(block) {
 
   return code;
 };
+
+Blockly.Arduino['mobs_collision'] = function(block) {
+  var s = block.getFieldValue('SPRITE');
+  var branch = Blockly.Arduino.statementToCode(block, 'DO');
+  var code = 'if (whoColliding != -1 && sprites[whoColliding].spriteNum == ' + s + ') {\n' +
+             branch + '  last' + s + ' = t;\n}';
+  return code + '\n';
+}
 
 Blockly.Arduino['mobs_destroy'] = function(block) {
   return 'removeSprite(whoColliding);\n';

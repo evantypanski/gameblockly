@@ -5,7 +5,7 @@ goog.provide('Blockly.Blocks.controls');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Types');
 
-Blockly.Blocks.controls.HUE = 180;
+Blockly.Blocks.controls.HUE = 90;
 
 Blockly.Blocks['if_controls'] = {
   init: function() {

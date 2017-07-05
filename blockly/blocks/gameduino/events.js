@@ -1,11 +1,16 @@
 'use strict';
   
-goog.provide('Blockly.Blocks.collision');
+goog.provide('Blockly.Blocks.events');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Types');
 
-Blockly.Blocks.collision.HUE = 25;
+Blockly.Blocks.events.HUE = 25;
+
+var spritesList = [['goomba', '12'], ['mystery block', '0'], ['star', '11'], ['brick', '14'],
+                ['bullet bill', '16'], ['cheep cheep', '30'], ['hammer', '28'], 
+                ['cloud', '27'], ['moblin', '40'], ['lynel', '47'], ['octorok', '34'],
+                ['coin', '5'], ['mushroom', '8'], ['fire flower', '10']];
 
 var spawnLocations = [['randomly', 'r'], ['in the top left', 'tl'], 
                       ['in the top middle', 'tm'], ['in the top right', 'tr'],
@@ -15,45 +20,19 @@ var spawnLocations = [['randomly', 'r'], ['in the top left', 'tl'],
 
 Blockly.Blocks['collision_enable'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
+    this.setColour(Blockly.Blocks.events.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-          [['enable', 'e'], ['disable', 'd']]), 'COLLISIONS')
+          [['enable', '0'], ['disable', '1']]), 'COLLISIONS')
         .appendField("collisions");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
   }
 };
 
-Blockly.Blocks['events_if'] = {
-  init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
-    this.appendValueInput('IF')
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .setCheck(Blockly.Types.BOOLEAN.checklist)
-        .appendField("if");
-    this.appendStatementInput('DO')
-        .appendField("do");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-  }
-};
-
-Blockly.Blocks['events_options'] = {
-  init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(
-              [['character\xa0is\xa0hit', 'h'], ['character collects item', 'i'], 
-               ['character dies', 'd'], ['no lives remaining', 'l']]),
-               'EVENT');
-    this.setOutput(true, Blockly.Types.BOOLEAN.output);
-  }
-};
-
 Blockly.Blocks['events_score'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
+    this.setColour(Blockly.Blocks.events.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([['increase', '+'], ['decrease', '-']]),
           'OPERATOR')
@@ -64,11 +43,42 @@ Blockly.Blocks['events_score'] = {
   }
 };
 
-Blockly.Blocks['events_reset'] = {
+Blockly.Blocks['events_nolives'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
+    this.setColour(Blockly.Blocks.events.HUE);
     this.appendDummyInput()
-        .appendField("reset game");
+        .appendField("if no lives remaining");
+    this.appendStatementInput('DO')
+        .appendField("do");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  }
+};
+
+
+Blockly.Blocks['events_lose'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.events.HUE);
+    this.appendDummyInput()
+        .appendField("lose game"); 
+    this.appendDummyInput()
+        .appendField("reset after")
+        .appendField(new Blockly.FieldNumber('5', 0, 15, 1), 'SECONDS')
+        .appendField("second(s)");
+    this.setPreviousStatement(true);
+    this.setNextStatement(false);
+  }
+};
+
+Blockly.Blocks['events_win'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.events.HUE);
+    this.appendDummyInput()
+        .appendField("win game"); 
+    this.appendDummyInput()
+        .appendField("reset after")
+        .appendField(new Blockly.FieldNumber('5', 0, 15, 1), 'SECONDS')
+        .appendField("second(s)");
     this.setPreviousStatement(true);
     this.setNextStatement(false);
   }
@@ -76,7 +86,7 @@ Blockly.Blocks['events_reset'] = {
 
 Blockly.Blocks['events_respawn'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
+    this.setColour(Blockly.Blocks.events.HUE);
     this.appendDummyInput()
         .appendField("respawn: where?")
         .appendField(new Blockly.FieldDropdown(spawnLocations), 
@@ -88,7 +98,7 @@ Blockly.Blocks['events_respawn'] = {
 
 Blockly.Blocks['events_lives'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.collision.HUE);
+    this.setColour(Blockly.Blocks.events.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([['lose', '-'], ['gain', '+']]),
           'OPERATOR')
