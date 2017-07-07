@@ -9,6 +9,8 @@ See [Ardublockly][1] for instructions on installation and features.  It is gener
 
 Notice how the files are running their uncompressed versions and the build will not include GameBlockly files.  This is important if planning on using GameBlockly: continue running on uncompressed files or add that functionality.  Was not needed for my purposes.
 
+Furthermore, the branch is gameblockly.  GameBlockly was first intended to be a branch and only served locally, but then merged into a fork for distribution.  However, for file name's sake, the branch name was kept.
+
 [1]: https://github.com/carlosperate/ardublockly/
 [2]: https://developers.google.com/blockly/
 [3]: http://summitbsa.org/events/jamboree/overview/
