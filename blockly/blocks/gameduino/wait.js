@@ -31,7 +31,7 @@ Blockly.Blocks['wait_collision'] = {
     this.setColour(Blockly.Blocks.time.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldNumber('1', 0, 1000, 1), 'SECONDS')
-        .appendField("seconds after most recent collision with")
+        .appendField("second(s) after most recent collision with")
         .appendField(new Blockly.FieldDropdown(spritesList), 'SPRITE');
     this.appendStatementInput('DO')
         .appendField("do");

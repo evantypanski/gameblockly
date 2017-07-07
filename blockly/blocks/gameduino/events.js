@@ -55,6 +55,21 @@ Blockly.Blocks['events_nolives'] = {
   }
 };
 
+Blockly.Blocks['events_compare'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.events.HUE);
+    this.appendDummyInput()
+        .appendField("if")
+        .appendField(new Blockly.FieldDropdown([['score', 's'], ['lives', 'l']]), 'TO_COMPARE')
+        .appendField(new Blockly.FieldDropdown([['>', '>'], ['=', '=='], ['<', '<']]), 'OP')
+        .appendField(new Blockly.FieldNumber('5000', 0, 999999, 1), 'TARG');
+    this.appendStatementInput('DO')
+        .appendField("do");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  }
+};
+
 
 Blockly.Blocks['events_lose'] = {
   init: function() {

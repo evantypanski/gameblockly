@@ -255,7 +255,7 @@ Blockly.Arduino['setup_all'] = function(block) {
                      '  drawWord(atxy(22, 18), "score:");\n' +
                      '  drawScore(atxy(21, 20), score);\n' +
                      '  delay(t * 1000);\n  setup();\n}\n';
-  Blockly.Arduino.addFunction('gameOver', gameOverCode);
+  Blockly.Arduino.addFunction('gameWon', gameWonCode);
 
   var resetSpritesCode = 'void resetSprites() {\n' +
                '  for (int i = 0; i < MAX_SPRITES; i++) {\n' +
@@ -376,7 +376,7 @@ Blockly.Arduino['setup_all'] = function(block) {
                 '    sprites[toRemove].jk = 0;\n' +
                 '    GD.__wstartspr(0);\n' +
                 '    draw_sprite(0, 400, sprites[toRemove].spriteNum, \n' +
-                '                sprites[toRemove].rot, sprites[toRemove].jk\n' +
+                '                sprites[toRemove].rot, sprites[toRemove].jk);\n' +
                 '    GD.__end();\n' +
                 '  }\n}\n';
   Blockly.Arduino.addFunction('removeSprite', removeSpriteCode);
@@ -388,7 +388,7 @@ Blockly.Arduino['setup_all'] = function(block) {
 
   // Add code to loop() to constantly redraw all sprites
   var code = 'whoColliding = -1;\nmoveMobs();\nt++;\nGD.__wstartspr(0);\nredrawAll();' + 
-             '\nGD.__end();\nGD.waitvblank();\n' +
+             '\nGD.__end();\ncollisions();\n' +
              'drawScore(atxy(SCORE_X + 6, OVERLAY_Y), score);\n' +
              'drawLives(atxy(LIVES_X + 6, OVERLAY_Y), lives);\n';
   return code;

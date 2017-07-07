@@ -70,6 +70,19 @@ Blockly.Arduino['events_score'] = function(block) {
   return 'score ' + op + '= ' + amt + ';\n';
 };
 
+Blockly.Arduino['events_compare'] = function(block) {
+  var comp = block.getFieldValue('TO_COMPARE');
+  
+  var code = 'if ('
+  if (comp == 's') code += 'score';
+  else code += 'lives';
+  code += block.getFieldValue('OP');
+  code += block.getFieldValue('TARG');
+  var branch = Blockly.Arduino.statementToCode(block, 'DO');
+  code += ') {\n' + branch + '}';
+  return code + '\n';
+};
+
 Blockly.Arduino['events_lose'] = function(block) {
   return 'gameOver(' + block.getFieldValue('SECONDS') + ');\n';
 };

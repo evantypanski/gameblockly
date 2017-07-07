@@ -33,23 +33,24 @@ Ardublockly.TOOLBOX_XML =
 '  </category>' +
 '  <sep></sep>' +
 '  <category id="catEvents" name="Events">' +
-'    <block type="collision_enable"></block>' +
 '    <block type="events_nolives"></block>' +
+'    <block type="mobs_collision"></block>' +
+'    <block type="wait_every"></block>' +
+'    <block type="wait_collision"></block>' +
+'    <block type="events_compare"></block>' +
+'  </category>' +
+'  <sep></sep>' +
+'  <category id="catEffects" name="Effects">' +
 '    <block type="events_score"></block>' +
-'    <block type="events_lose"></block>' +
-'    <block type="events_win"></block>' +
 '    <block type="events_respawn"></block>' +
 '    <block type="events_lives"></block>' +
+'    <block type="collision_enable"></block>' +
+'    <block type="events_lose"></block>' +
+'    <block type="events_win"></block>' +
 '  </category>' +
 '  <sep></sep>' +
 '  <category id="catMobs" name="Monsters and Items">' +
 '    <block type="mobs_spawn"></block>' +
-'    <block type="mobs_collision"></block>' +
 '    <block type="mobs_destroy"></block>' + 
-'  </category>' +
-'  <sep></sep>' +
-'  <category id="catWait" name="Time">' +
-'    <block type="wait_every"></block>' +
-'    <block type="wait_collision"></block>' +
 '  </category>' +
 '</xml>';
