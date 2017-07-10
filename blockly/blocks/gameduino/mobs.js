@@ -17,8 +17,7 @@ var spawnLocations = [['randomly', 'r'], ['in the top left', 'tl'],
                       ['in the middle right', 'mr'], ['in the bottom left', 'bl'],
                       ['in the bottom middle', 'bm'], ['in the bottom right', 'br']];
 var moves = [['randomly', '4'], ['following the player', '5'], ['always left', '2'], 
-             ['always right', '3'], ['always up', '0'], ['always down', '1'],
-             ['none', '6']];
+             ['always right', '3'], ['always up', '0'], ['always down', '1']];
 
 
 Blockly.Blocks['mobs_spawn'] = {

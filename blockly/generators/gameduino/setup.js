@@ -388,9 +388,8 @@ Blockly.Arduino['setup_all'] = function(block) {
 
   // Add code to loop() to constantly redraw all sprites
   var code = 'whoColliding = -1;\nmoveMobs();\nt++;\nGD.__wstartspr(0);\nredrawAll();' + 
-             '\nGD.__end();\ncollisions();\n' +
-             'drawScore(atxy(SCORE_X + 6, OVERLAY_Y), score);\n' +
-             'drawLives(atxy(LIVES_X + 6, OVERLAY_Y), lives);\n';
+             '\nGD.__end();\ndrawScore(atxy(SCORE_X + 6, OVERLAY_Y), score);\n' +
+             'drawLives(atxy(LIVES_X + 6, OVERLAY_Y), lives);\ncollisions();\n' ;
   return code;
 };
 
