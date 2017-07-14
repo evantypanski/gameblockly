@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage[left=1in, right=1in, top=.75in, bottom=1in]{geometry}
+
+\renewcommand{\headrulewidth}{0em} % Makes no header rule at top
+\fancyhead{} % Makes no header
+
+
+\titleformat{\section}
+{} % Modifiers on text
+{} % Numbering
+{0em} % Distance between number and text
+{\LARGE\bfseries\vspace{-.05in}} [\titlerule] % Code appearing after gap but before title
+
+
+\begin{document}
+\begin{center}
+  \huge \textbf{GameBlockly}
+\end{center}
+\section{Basics}
+GameBlockly allows you to make games simply just by dragging and dropping blocks.
+
+\begin{figure}[h!]
+  {\centering
+    \includegraphics[scale=.25]{images/gameblockly/setupcontrol.png}
+    \caption{A setup block connected to a control block.}
+    }
+\end{figure}
+
+Each of those four blocks were selected and dragged into place.  That's all it takes!
+
+The setup block contains two main parts: code to be run once at the beginning, and code to be run 72 times a second.  The code that is run 72 times a second is in a loop, which simply executes commands until something happens: in this case, until the game ends.
+
+\begin{figure}[h!]
+  {\centering
+    \includegraphics[scale=.25]{images/gameblockly/setuponce.png}
+    \caption{Code that is only run once per game}
+    }
+\end{figure}
+
+\begin{figure}[h!]
+  {\centering
+    \includegraphics[scale=.25]{images/gameblockly/setuploop.png}
+    \caption{Code that is run 72 times a second: a loop}
+    }
+\end{figure}
+
+
+Controls may be found under the Controls tab.  For each control, drag whatever commands you want to do inside of the if statement.
+
+\begin{figure}[h!]
+  {\centering
+    \includegraphics[scale=.25]{images/gameblockly/controlsif.png}
+    \caption{Left: Controls menu -- Right: empty if statement}
+    }
+\end{figure}
+
+This is the first example of an if statement.  If statements check to see if the statement that follows is true (joystick presses up, for example).  Should this statement be true, the if statement then executes the code inside.  More if statements may be found in the Events tab.
+
+Every statement in the events menu is an if statement, even the statements that say "every 1 second(s)."  Remember: everything below the setup block is in a loop and is running 72 times a second.  Whenever you place code, it should be inside of an if statement!
+
+You may create monsters, items, powerups, and more with the Monsters and Items tab.  
+
+\begin{figure}[h!]
+  {\centering
+    \includegraphics[scale=.25]{images/gameblockly/monstertab.png}
+    \caption{Monsters and Items tab}
+    }
+\end{figure}
+Inside an if statement, or in the setup, place the make sprite block.  Then, customize the sprite, where it spawns, and how it moves.
+
+Then, define what happens when you touch this sprite with another if statement.  Go in the Events tab and find the if statement for when you get hit by a sprite:
+
+\begin{figure}[h!]
+    {\centering
+    \includegraphics[scale=.25]{images/gameblockly/hitsprite.png}
+    \caption{If statement when hitting a sprite}
+    }
+\end{figure}
+
+You can go in the Effects tab and see what options you can put in the if statements.  For example, if it's an enemy, you may want to lose a life, lower your score, and respawn when you hit a sprite.  If it's an item, you may want to gain a life, increase your score, or spawn another item to collect.
+
+To upload the program, simply press the red button with an arrow in it on the top right of the screen.  Then, wait for your game to upload and have fun!
+
+\begin{figure}[h!]
+    {\centering
+    \includegraphics[scale=.25]{images/gameblockly/upload.png}
+    \caption{Press the button in the top right to upload}
+    }
+\end{figure}
+
+\newpage
+\section{Tips and Tricks}
+\begin{enumerate}
+    \item When setting speed values, remember that a speed of 1 is the max.  It is suggested that you make your character move around 1-5 speed and all others move slower.
+    \item When you die, you might not want to be able to spawn on top of a monster and immediately die again.  So, you can disable collisions when you get hit, then enable them about one second later.
+
+\begin{figure}[h!]
+    {\centering
+    \includegraphics[scale=.25]{images/gameblockly/disablecollisions.png}
+    \caption{Disable collisions when hit, enable collisions one second later}
+    }
+\end{figure}
+
+    \item You can make different sprites have different effects.  For example, some monsters may get destroyed when they touch you and some items may allow you to gain a life.  Remember, if an item is only usable once, destroy it once it is taken (under the Monsters and Items tab)
+
+\begin{figure}[h!]
+    {\centering
+    \includegraphics[scale=.25]{images/gameblockly/diffeffects.png}
+    \caption{Hitting a goomba destroys it, hitting a star gains a life}
+    }
+\end{figure}
+    \item Make a way to win your game (such as score being over a certain amount) and lose your game (such as with no lives remaining)
+\begin{figure}[h!]
+    {\centering
+    \includegraphics[scale=.25]{images/gameblockly/winlose.png}
+    \caption{Win the game if your score is over 1337, lose if you have no lives}
+    }
+\end{figure}
+    \item You can duplicate blocks by right clicking them and selecting duplicate.  This especially helps when defining controls and what happens when getting hit by a monster (since both are repetitive).
+\end{enumerate}
+\end{document}

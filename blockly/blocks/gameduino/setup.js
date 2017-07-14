@@ -31,7 +31,7 @@ Blockly.Blocks['setup_all'] = {
     this.appendDummyInput()
         .appendField("set character speed to")
         .appendField(new Blockly.FieldNumber('3', 0, 10, 1), 'SPEED')
-        .appendField("(0 to 10) 0 max speed");
+        .appendField("(1 to 10) 1 max speed");
     this.appendDummyInput()
         .appendField("select character")
         .appendField(new Blockly.FieldDropdown([['Mario', 'm'], ['Link', 'l']]), 'SPRITE');
