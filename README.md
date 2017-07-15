@@ -9,6 +9,8 @@ Notice that the Arduino and Blockly blocks are still in the source files, simply
 
 See [Ardublockly][1] for instructions on installation and features.  It is generally the same.
 
+In order to install, add the Gameduino_Sprites directory to you Arduino libraries directory and make sure you have the Gameduino library.
+
 Notice how the files are running their uncompressed versions and the build will not include GameBlockly files.  This is important if planning on using GameBlockly: continue running on uncompressed files or add that functionality.  Was not needed for my purposes.
 
 
